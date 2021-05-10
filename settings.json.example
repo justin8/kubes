@@ -1,0 +1,7 @@
+{
+    "DOMAIN_NAME": "",
+    "CONFIG_DIR": "/storage/server-files/config",
+    "STORAGE_DIR": "/storage",
+    "USER_ID": "1001",
+    "GROUP_ID": "1001"
+}
