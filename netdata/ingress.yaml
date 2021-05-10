@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: netdata
+spec:
+  rules:
+  - host: "netdata.{{ DOMAIN_NAME }}"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: netdata
+            port:
+              number: 19999

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netdata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netdata
+  template:
+    metadata:
+      labels:
+        app: netdata
+    spec:
+      containers:
+      - name: netdata
+        image: netdata/netdata
+        ports:
+        - containerPort: 19999
+        volumeMounts:
+        - name: config
+          mountPath: /etc/netdata/netdata.conf
+          subPath: netdata.conf
+      volumes:
+      - name: config
+        configMap:
+          name: netdata-config
