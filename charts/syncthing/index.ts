@@ -4,7 +4,7 @@ import { Chart, ChartProps } from "cdk8s";
 import * as k from "../../imports/k8s";
 
 export interface SyncthingProps extends ChartProps {
-  configPath: string;
+  hostConfigPath: string;
   groupID: string;
   userID: string;
 }
@@ -24,7 +24,7 @@ export class Syncthing extends Chart {
 
     const configVolume: k.Volume = {
       name: "config",
-      hostPath: { path: `${props.configPath}/syncthing` },
+      hostPath: { path: `${props.hostConfigPath}/syncthing` },
     };
 
     const livenessProbe: k.Probe = {

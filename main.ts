@@ -1,26 +1,66 @@
 import { App } from "cdk8s";
-import { MediaServer } from "./charts/mediaServer";
 import { Netdata } from "./charts/netdata";
-import { Plex } from "./charts/plex";
 import { Syncthing } from "./charts/syncthing";
-import { UnifiController } from "./charts/unifiController";
 
 import * as config from "./config.json";
+import { LinuxServerApp } from "./lib/linuxServerApp";
 
 const app = new App();
 
 new Netdata(app, "Netdata", { labels: { app: "netdata" }, ...config });
-new Plex(app, "Plex", { labels: { app: "plex" }, ...config });
+// new Plex(app, "Plex", { labels: { app: "plex" }, ...config });
 new Syncthing(app, "Syncthing", {
   labels: { app: "syncthing" },
   ...config,
 });
-new UnifiController(app, "UnifiController", {
-  labels: { app: "unifi-controller" },
+
+new LinuxServerApp(app, "UnifiController", {
+  appName: "unifi-controller",
+  port: 8080,
+  enableIngress: false,
+  livenessProbe: {
+    httpGet: {
+      port: 8443,
+      path: "/manage/account/login?redirect=manage",
+      scheme: "HTTPS",
+    },
+  },
   ...config,
 });
-new MediaServer(app, "MediaServer", {
-  labels: { app: "mediaserver" },
+
+new LinuxServerApp(app, "Plex", {
+  appName: "plex",
+  port: 32400,
+  enableIngress: false,
+  enableHostNetworking: true,
+  livenessProbe: {
+    httpGet: { port: 32400, path: "/web" },
+    initialDelaySeconds: 30,
+  },
+  ...config,
+});
+
+new LinuxServerApp(app, "Sonarr", {
+  appName: "sonarr",
+  port: 8989,
+  ...config,
+});
+
+new LinuxServerApp(app, "Radarr", {
+  appName: "radarr",
+  port: 7878,
+  ...config,
+});
+
+new LinuxServerApp(app, "Jackett", {
+  appName: "jackett",
+  port: 9117,
+  ...config,
+});
+
+new LinuxServerApp(app, "Transmission", {
+  appName: "transmission",
+  port: 9091,
   ...config,
 });
 

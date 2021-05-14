@@ -1,7 +1,7 @@
 {
   "parentDomainName": "example.com",
-  "storagePath": "/storage",
-  "configPath": "/config",
+  "hostStoragePath": "/storage",
+  "hostConfigPath": "/config",
   "groupID": "1001",
   "userID": "1001",
   "TZ": "Australia/Brisbane"
