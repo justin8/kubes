@@ -227,7 +227,7 @@ class Mosquitto extends Construct {
     const appName = "mosquitto";
     const labels = { app: appName };
     const metadata: k.ObjectMeta = { name: appName, labels };
-    const image = "eclipse-mosquitto:1.6";
+    const image = "eclipse-mosquitto:2";
     const port = 1883;
 
     const configVolume: k.Volume = {
