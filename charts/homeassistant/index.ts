@@ -81,22 +81,6 @@ class HomeAssistant extends Construct {
       ],
     };
 
-    const databaseContainerDefinition: k.Container = {
-      name: "database",
-      image: "mysql:8",
-      env: [databasePasswordSecret],
-      livenessProbe: {
-        tcpSocket: { port: 3306 },
-      },
-      volumeMounts: [
-        {
-          mountPath: "/var/lib/mysql",
-          name: "config",
-          subPath: `${appName}-database`,
-        },
-      ],
-    };
-
     new BasicIngress(this, "ingress", {
       metadata: metadata,
       port: port,
@@ -105,7 +89,7 @@ class HomeAssistant extends Construct {
       serviceName: appName,
     });
 
-    new k.Deployment(this, "deployment", {
+    new k.Deployment(this, "homeassistant-deployment", {
       metadata,
       spec: {
         selector: {
@@ -116,10 +100,52 @@ class HomeAssistant extends Construct {
           spec: {
             hostNetwork: true,
             volumes: [configVolume, timezoneVolume],
-            containers: [
-              homeAssistantContainerDefinition,
-              databaseContainerDefinition,
-            ],
+            containers: [homeAssistantContainerDefinition],
+          },
+        },
+      },
+    });
+
+    const databaseLabels = { app: `${appName}-database` };
+    const databaseMetadata: k.ObjectMeta = {
+      name: databaseLabels.app,
+      labels: databaseLabels,
+    };
+    const databasePort = 3306;
+
+    const databaseContainerDefinition: k.Container = {
+      name: "database",
+      image: "mysql:8",
+      env: [databasePasswordSecret],
+      livenessProbe: { tcpSocket: { port: 3306 } },
+      volumeMounts: [
+        {
+          mountPath: "/var/lib/mysql",
+          name: "config",
+          subPath: `${appName}-database`,
+        },
+      ],
+    };
+
+    new k.Service(this, "database-service", {
+      metadata: databaseMetadata,
+      spec: {
+        ports: [{ port: databasePort, targetPort: databasePort }],
+        selector: databaseLabels,
+      },
+    });
+
+    new k.Deployment(this, "database-deployment", {
+      metadata: databaseMetadata,
+      spec: {
+        selector: {
+          matchLabels: databaseLabels,
+        },
+        template: {
+          metadata: databaseMetadata,
+          spec: {
+            volumes: [configVolume, timezoneVolume],
+            containers: [databaseContainerDefinition],
           },
         },
       },
@@ -307,7 +333,7 @@ class Zigbee2MQTT extends Construct {
     };
 
     const zigbeeDeviceVolume: k.Volume = {
-      name: "zigbeeDeviceVolume",
+      name: "zigbee-device-volume",
       hostPath: { path: zigbeeDevicePath },
     };
 
@@ -323,7 +349,7 @@ class Zigbee2MQTT extends Construct {
         },
         {
           mountPath: zigbeeDevicePath,
-          name: "zigbeeDeviceVolume",
+          name: "zigbee-device-volume",
         },
       ],
     };
