@@ -41,21 +41,21 @@ export class Syncthing extends Chart {
     const container: k.Container = {
       name: "syncthing",
       image,
+      livenessProbe,
       env: [
         {
           name: "PGID",
           value: props.groupID,
         },
-        { name: "PUID", value: props.userID },
+        {
+          name: "PUID",
+          value: props.userID,
+        },
       ],
       volumeMounts: [
-        {
-          mountPath: "/Dropbox",
-          name: dropboxVolume.name,
-        },
-        { mountPath: "/syncthing", name: configVolume.name },
+        { mountPath: "/Dropbox", name: dropboxVolume.name },
+        { mountPath: "/config", name: configVolume.name },
       ],
-      livenessProbe,
     };
 
     new k.Deployment(this, "deployment", {
