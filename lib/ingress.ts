@@ -2,10 +2,29 @@ import { Construct } from "constructs";
 import * as k from "../imports/k8s";
 
 export interface IngressProps {
+  /**
+   * Any additional metdata you wish to add
+   */
   metadata?: k.ObjectMeta;
+
+  /**
+   * The port your container is listening on
+   */
   port: number;
+
+  /**
+   * Labels on your pods to use for the service selector
+   */
   selector: { [key: string]: string };
+
+  /**
+   * The parent domain name, service will be exposed at `${serviceName}.${parentDomainName}`
+   */
   parentDomainName: string;
+
+  /**
+   * The name to give this service
+   */
   serviceName: string;
 }
 
