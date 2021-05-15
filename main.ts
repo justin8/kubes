@@ -1,4 +1,5 @@
 import { App } from "cdk8s";
+import { HomeAutomation } from "./charts/homeassistant";
 import { Netdata } from "./charts/netdata";
 import { Syncthing } from "./charts/syncthing";
 
@@ -8,7 +9,6 @@ import { LinuxServerApp } from "./lib/linuxServerApp";
 const app = new App();
 
 new Netdata(app, "Netdata", { labels: { app: "netdata" }, ...config });
-// new Plex(app, "Plex", { labels: { app: "plex" }, ...config });
 new Syncthing(app, "Syncthing", {
   labels: { app: "syncthing" },
   ...config,
@@ -61,6 +61,10 @@ new LinuxServerApp(app, "Jackett", {
 new LinuxServerApp(app, "Transmission", {
   appName: "transmission",
   port: 9091,
+  ...config,
+});
+
+new HomeAutomation(app, "HomeAutomation", {
   ...config,
 });
 
