@@ -18,6 +18,7 @@ new LinuxServerApp(app, "UnifiController", {
   appName: "unifi-controller",
   port: 8080,
   enableIngress: false,
+  enableHostNetworking: true,
   livenessProbe: {
     httpGet: {
       port: 8443,
