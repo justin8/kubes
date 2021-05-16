@@ -26,6 +26,11 @@ export interface IngressProps {
    * The name to give this service
    */
   serviceName: string;
+
+  /**
+   * Add extra annoyations to the ingress resource
+   */
+  ingressAnnotations?: { [key: string]: string };
 }
 
 export class BasicIngress extends Construct {
@@ -48,12 +53,21 @@ export class BasicIngress extends Construct {
       },
     });
 
+    const host = `${props.serviceName}.${props.parentDomainName}`;
+
     this.ingress = new k.IngressV1Beta1(this, "ingresss", {
-      metadata: { name: props.serviceName, ...props.metadata },
+      metadata: {
+        name: props.serviceName,
+        annotations: {
+          "cert-manager.io/cluster-issuer": "acme-prod",
+          ...props.ingressAnnotations,
+        },
+        ...props.metadata,
+      },
       spec: {
         rules: [
           {
-            host: `${props.serviceName}.${props.parentDomainName}`,
+            host,
             http: {
               paths: [
                 {
@@ -66,6 +80,7 @@ export class BasicIngress extends Construct {
             },
           },
         ],
+        tls: [{ hosts: [host], secretName: `${props.serviceName}-cert` }],
       },
     });
   }

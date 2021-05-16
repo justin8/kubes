@@ -39,12 +39,10 @@ export class TeslaMate extends Chart {
       port: 4000,
       serviceName: "teslamate",
       selector: labels,
-      metadata: {
-        annotations: {
-          "nginx.ingress.kubernetes.io/auth-type": "basic",
-          "nginx.ingress.kubernetes.io/auth-secret": secret.name,
-          "nginx.ingress.kubernetes.io/auth-realm": "Authentication Required",
-        },
+      ingressAnnotations: {
+        "nginx.ingress.kubernetes.io/auth-type": "basic",
+        "nginx.ingress.kubernetes.io/auth-secret": secret.name,
+        "nginx.ingress.kubernetes.io/auth-realm": "Authentication Required",
       },
     });
 
