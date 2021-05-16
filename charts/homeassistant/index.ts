@@ -285,14 +285,6 @@ class Mosquitto extends Construct {
       ],
     };
 
-    new BasicIngress(this, "ingress", {
-      metadata: metadata,
-      port: port,
-      parentDomainName: props.parentDomainName,
-      selector: labels,
-      serviceName: appName,
-    });
-
     new k.Deployment(this, "deployment", {
       metadata,
       spec: {
