@@ -28,7 +28,9 @@ export class Syncthing extends Chart {
     };
 
     const livenessProbe: k.Probe = {
-      initialDelaySeconds: 30,
+      initialDelaySeconds: 60,
+      periodSeconds: 30,
+      timeoutSeconds: 10,
       exec: {
         command: [
           "sh",
