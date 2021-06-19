@@ -4,5 +4,7 @@
   "hostConfigPath": "/config",
   "groupID": "1001",
   "userID": "1001",
+  "user": "user1",
+  "password": "hunter2",
   "TZ": "Australia/Brisbane"
 }

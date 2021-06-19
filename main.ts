@@ -64,6 +64,16 @@ new LinuxServerApp(app, "Transmission", {
   appName: "transmission",
   port: 9091,
   ...config,
+  env: [
+    {
+      name: "USER",
+      value: config.user,
+    },
+    {
+      name: "PASS",
+      value: config.password,
+    },
+  ],
 });
 
 new HomeAutomation(app, "HomeAutomation", { ...config });

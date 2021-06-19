@@ -97,6 +97,11 @@ export interface LinuxServerAppProps extends ChartProps {
    * @default ghcr.io/linuxserver/${appName}
    */
   image?: string;
+
+  /**
+   * Environment variables to pass through to the container
+   */
+  env?: k.EnvVar[];
 }
 
 export class LinuxServerApp extends Chart {
@@ -110,6 +115,7 @@ export class LinuxServerApp extends Chart {
     props.enableLivenessProbe = props.enableLivenessProbe ?? true;
     props.enableIngress = props.enableIngress ?? true;
     props.enableHostNetworking = props.enableHostNetworking || false;
+    props.env = props.env || [];
     props.image = props.image ?? `ghcr.io/linuxserver/${props.appName}`;
     const labels = { app: props.appName, ...this.labels };
     const metadata = { labels };
@@ -143,6 +149,7 @@ export class LinuxServerApp extends Chart {
       env: [
         { name: "PGID", value: props.groupID },
         { name: "PUID", value: props.userID },
+        ...props.env,
       ],
       ports: [{ containerPort: props.port }],
       volumeMounts: [
