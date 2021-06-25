@@ -15,20 +15,20 @@ new Syncthing(app, "Syncthing", {
   ...config,
 });
 
-new LinuxServerApp(app, "UnifiController", {
-  appName: "unifi-controller",
-  port: 8080,
-  enableIngress: false,
-  enableHostNetworking: true,
-  livenessProbe: {
-    httpGet: {
-      port: 8443,
-      path: "/manage/account/login?redirect=manage",
-      scheme: "HTTPS",
-    },
-  },
-  ...config,
-});
+//new LinuxServerApp(app, "UnifiController", {
+//  appName: "unifi-controller",
+//  port: 8080,
+//  enableIngress: false,
+//  enableHostNetworking: true,
+//  livenessProbe: {
+//    httpGet: {
+//      port: 8443,
+//      path: "/manage/account/login?redirect=manage",
+//      scheme: "HTTPS",
+//    },
+//  },
+//  ...config,
+//});
 
 new LinuxServerApp(app, "Plex", {
   appName: "plex",
