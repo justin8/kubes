@@ -85,7 +85,7 @@ function TeslaMateContainer(domain: string, tz: string): k.Container {
       { name: "DATABASE_USER", value: databaseUser },
       { name: "DATABASE_NAME", value: databaseName },
       { name: "DATABASE_HOST", value: "localhost" },
-      { name: "MQTT_HOST", value: "192.168.1.15" },
+      { name: "MQTT_HOST", value: "mqtt.dray.id.au" },
       { name: "MQTT_USERNAME", valueFrom: getSecret("MQTT_USERNAME") },
       { name: "MQTT_PASSWORD", valueFrom: getSecret("MQTT_PASSWORD") },
       { name: "VIRTUAL_HOST", value: domain },
