@@ -50,28 +50,45 @@ export class Netdata extends Chart {
       ],
     };
 
-    new k.Deployment(this, "deployment", {
+    new k.DaemonSet( this, "daemon", {
       metadata,
       spec: {
         selector: {
-          matchLabels: labels,
+          matchLabels: labels
         },
         template: {
           metadata,
           spec: {
-            volumes: [configVolume],
+            hostNetwork: true,
+            volumes: [configVolume, cacheVolume],
             containers: [container],
-          },
-        },
-      },
-    });
+          }
+        }
+      }
+    })
 
-    new BasicIngress(this, "netdata", {
-      metadata,
-      port,
-      parentDomainName: props.parentDomainName,
-      selector: labels,
-      serviceName: "netdata",
-    });
+    // new k.Deployment(this, "deployment", {
+    //   metadata,
+    //   spec: {
+    //     selector: {
+    //       matchLabels: labels,
+    //     },
+    //     template: {
+    //       metadata,
+    //       spec: {
+    //         volumes: [configVolume, cacheVolume],
+    //         containers: [container],
+    //       },
+    //     },
+    //   },
+    // });
+
+    // new BasicIngress(this, "netdata", {
+    //   metadata,
+    //   port,
+    //   parentDomainName: props.parentDomainName,
+    //   selector: labels,
+    //   serviceName: "netdata",
+    // });
   }
 }
