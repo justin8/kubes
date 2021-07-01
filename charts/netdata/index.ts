@@ -7,6 +7,7 @@ import * as path from "path";
 import { BasicIngress } from "../../lib/ingress";
 
 export interface NetdataProps extends ChartProps {
+  hostConfigPath: string;
   parentDomainName: string;
 }
 
@@ -27,6 +28,11 @@ export class Netdata extends Chart {
       configMap: { name: config.name },
     };
 
+    const cacheVolume: k.Volume = {
+      name: "netdata-cache",
+      hostPath: {path: `${props.hostConfigPath}/netdata/cache`}
+    }
+
     const container: k.Container = {
       name: "netdata",
       image,
@@ -37,6 +43,10 @@ export class Netdata extends Chart {
           subPath: "netdata.conf",
           name: configVolume.name,
         },
+        {
+          mountPath: "/var/cache/netdata",
+          name: cacheVolume.name,
+        }
       ],
     };
 
