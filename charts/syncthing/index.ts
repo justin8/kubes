@@ -63,7 +63,7 @@ export class Syncthing extends Chart {
       volumeMounts: [
         { mountPath: "/Dropbox", name: dropboxVolume.name },
         { mountPath: "/config", name: configVolume.name },
-        { mountPath: "/storage", name: syncthingVolume.name },
+        { mountPath: "/syncthing", name: syncthingVolume.name },
       ],
     };
 
@@ -77,7 +77,7 @@ export class Syncthing extends Chart {
           metadata: { labels },
           spec: {
             hostNetwork: true,
-            volumes: [dropboxVolume, configVolume],
+            volumes: [dropboxVolume, configVolume, syncthingVolume],
             containers: [container],
           },
         },
