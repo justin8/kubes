@@ -5,6 +5,7 @@ import * as k from "../../imports/k8s";
 
 export interface SyncthingProps extends ChartProps {
   hostConfigPath: string;
+  hostStoragePath: string;
   groupID: string;
   userID: string;
 }
@@ -21,6 +22,11 @@ export class Syncthing extends Chart {
       name: "storage",
       hostPath: { path: "/home/downloads/Dropbox" },
     };
+
+    const syncthingVolume: k.Volume = {
+      name: "syncthing",
+      hostPath: { path: `${props.hostStoragePath}/syncthing`}
+    }
 
     const configVolume: k.Volume = {
       name: "config",
@@ -57,6 +63,7 @@ export class Syncthing extends Chart {
       volumeMounts: [
         { mountPath: "/Dropbox", name: dropboxVolume.name },
         { mountPath: "/config", name: configVolume.name },
+        { mountPath: "/storage", name: syncthingVolume.name },
       ],
     };
 
