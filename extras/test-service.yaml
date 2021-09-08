@@ -1,0 +1,58 @@
+# Test with:
+# curl -kH "Host: example.dray.id.au" https://192.168.4.10
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: example
+  name: example
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: example
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: acme-prod
+  labels:
+    app: example
+  name: example
+spec:
+  rules:
+    - host: example.dray.id.au
+      http:
+        paths:
+          - backend:
+              serviceName: example
+              servicePort: 8080
+  tls:
+    - hosts:
+        - example.dray.id.au
+      secretName: example-cert
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: example
+  name: example-deployment-c850f41c
+spec:
+  selector:
+    matchLabels:
+      app: example
+  template:
+    metadata:
+      labels:
+        app: example
+    spec:
+      containers:
+        - image: brndnmtthws/nginx-echo-headers
+          name: example
+          ports:
+            - containerPort: 8080
+

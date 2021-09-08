@@ -11,6 +11,16 @@ import { BasicIngress } from "../../lib/ingress";
  * Copy secrets.json.example to secrets.json and fill in the required pieces
  */
 
+/**
+ * For Node Red: Modify the ./node-red/Dockerfile, this is a custom image that pulls in extra modules
+ * Modifying it should cause it to be auto-updated and consumed locally
+ */
+const NODE_RED_IMAGE = "justin8/node-red:latest";
+const HOME_ASSISTANT_IMAGE = "homeassistant/home-assistant:2021.6.6";
+const HOME_ASSISTANT_DATABASE_IMAGE = "mysql:8";
+const ZIGBEE2MQTT_IMAGE = "koenkk/zigbee2mqtt";
+const MOSQUITTO_IMAGE = "eclipse-mosquitto:2";
+
 export class HomeAutomation extends Chart {
   constructor(scope: Construct, id: string, props: CommonProps) {
     super(scope, id, props);
@@ -43,7 +53,7 @@ class HomeAssistant extends Construct {
     const appName = "home-assistant";
     const labels = { app: appName };
     const metadata: k.ObjectMeta = { name: appName, labels };
-    const image = "homeassistant/home-assistant:2020.12.2";
+    const image = HOME_ASSISTANT_IMAGE;
     const port = 8123;
 
     const configVolume: k.Volume = {
@@ -115,7 +125,7 @@ class HomeAssistant extends Construct {
 
     const databaseContainerDefinition: k.Container = {
       name: "database",
-      image: "mysql:8",
+      image: HOME_ASSISTANT_DATABASE_IMAGE,
       env: [databasePasswordSecret],
       livenessProbe: { tcpSocket: { port: 3306 } },
       volumeMounts: [
@@ -159,7 +169,7 @@ class NodeRed extends Construct {
     const appName = "node-red";
     const labels = { app: appName };
     const metadata: k.ObjectMeta = { name: appName, labels };
-    const image = "justin8/node-red";
+    const image = NODE_RED_IMAGE;
     const port = 1880;
 
     const configVolume: k.Volume = {
@@ -175,6 +185,7 @@ class NodeRed extends Construct {
     const containerDefinition: k.Container = {
       name: appName,
       image: image,
+      imagePullPolicy: "Always",
       livenessProbe: { httpGet: { port } },
       volumeMounts: [
         {
@@ -227,7 +238,7 @@ class Mosquitto extends Construct {
     const appName = "mosquitto";
     const labels = { app: appName };
     const metadata: k.ObjectMeta = { name: appName, labels };
-    const image = "eclipse-mosquitto:2";
+    const image = MOSQUITTO_IMAGE;
     const port = 1883;
 
     const configVolume: k.Volume = {
@@ -316,7 +327,7 @@ class Zigbee2MQTT extends Construct {
     const appName = "zigbee2mqtt";
     const labels = { app: appName };
     const metadata: k.ObjectMeta = { name: appName, labels };
-    const image = "koenkk/zigbee2mqtt";
+    const image = ZIGBEE2MQTT_IMAGE;
     const zigbeeDevicePath = "/dev/ttyACM0";
 
     const configVolume: k.Volume = {

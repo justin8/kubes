@@ -11,7 +11,7 @@
     "compile": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "build": "npm run create-netdata-config && npm run update-teslamate-auth && npm run compile && npm run synth",
+    "build": "npm run build-containers && npm run create-netdata-config && npm run update-teslamate-auth && npm run compile && npm run synth",
     "build-containers": "npm run build-node-red",
     "build-node-red": "./charts/homeassistant/node-red/build.sh",
     "create-netdata-config": "(cd charts/netdata; [ -e netdata.conf ] || sed '/^\\s*#/d' netdata.conf.example > netdata.conf)",
