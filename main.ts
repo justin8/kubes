@@ -9,11 +9,13 @@ import { LinuxServerApp } from "./lib/linuxServerApp";
 
 const app = new App();
 
-new Netdata(app, "Netdata", { labels: { app: "netdata" }, ...config });
 new Syncthing(app, "Syncthing", {
   labels: { app: "syncthing" },
   ...config,
 });
+
+// Disabling this as it isn't really used any more, and generates a ton of noisy logs
+// new Netdata(app, "Netdata", { labels: { app: "netdata" }, ...config });
 
 //new LinuxServerApp(app, "UnifiController", {
 //  appName: "unifi-controller",
