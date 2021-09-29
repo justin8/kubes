@@ -13,6 +13,10 @@ import { BasicIngress } from "../../lib/ingress";
 
 const databaseUser = "teslamate";
 const databaseName = "teslamate";
+const version = "1.24.0";
+const teslamateImage = `justin8/teslamate:${version}`;
+const grafanaImage = `teslamate/grafana:${version}`;
+const databaseImage = "postgres:13";
 
 export class TeslaMate extends Chart {
   constructor(scope: Construct, id: string, props: CommonProps) {
@@ -78,8 +82,8 @@ function TeslaMateContainer(domain: string, tz: string): k.Container {
   const livenessProbe: k.Probe = {};
   return {
     name: "teslamate",
-    image: "teslamate/teslamate",
-    livenessProbe: { httpGet: { port: 4000 } },
+    image: teslamateImage,
+    // livenessProbe: { httpGet: { port: 4000 } },
     env: [
       { name: "DATABASE_PASS", valueFrom: getSecret("DATABASE_PASSWORD") },
       { name: "DATABASE_USER", value: databaseUser },
@@ -99,7 +103,7 @@ function TeslaMateContainer(domain: string, tz: string): k.Container {
 function DatabaseContainer(): k.Container {
   return {
     name: "database",
-    image: "postgres:13",
+    image: databaseImage,
     livenessProbe: { tcpSocket: { port: 5432 } },
     env: [
       { name: "POSTGRES_PASSWORD", valueFrom: getSecret("DATABASE_PASSWORD") },
@@ -119,7 +123,7 @@ function DatabaseContainer(): k.Container {
 function GrafanaContainer(grafanaDomain: string): k.Container {
   return {
     name: "grafana",
-    image: "teslamate/grafana",
+    image: grafanaImage,
     ports: [{ containerPort: 3000 }],
     livenessProbe: { httpGet: { port: 3000, path: "/login" } },
     env: [
