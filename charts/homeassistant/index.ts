@@ -20,6 +20,7 @@ const HOME_ASSISTANT_IMAGE = "homeassistant/home-assistant:2021.6.6";
 const HOME_ASSISTANT_DATABASE_IMAGE = "mysql:8";
 const ZIGBEE2MQTT_IMAGE = "koenkk/zigbee2mqtt";
 const MOSQUITTO_IMAGE = "eclipse-mosquitto:2";
+const ZIGBEE_DEVICE_PATH = "/dev/ttyUSB0";
 
 export class HomeAutomation extends Chart {
   constructor(scope: Construct, id: string, props: CommonProps) {
@@ -328,7 +329,7 @@ class Zigbee2MQTT extends Construct {
     const labels = { app: appName };
     const metadata: k.ObjectMeta = { name: appName, labels };
     const image = ZIGBEE2MQTT_IMAGE;
-    const zigbeeDevicePath = "/dev/ttyACM0";
+    const zigbeeDevicePath = ZIGBEE_DEVICE_PATH;
 
     const configVolume: k.Volume = {
       name: "config",
