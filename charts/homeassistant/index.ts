@@ -16,7 +16,7 @@ import { BasicIngress } from "../../lib/ingress";
  * Modifying it should cause it to be auto-updated and consumed locally
  */
 const NODE_RED_IMAGE = "justin8/node-red:latest";
-const HOME_ASSISTANT_IMAGE = "homeassistant/home-assistant:2021.6.6";
+const HOME_ASSISTANT_IMAGE = "homeassistant/home-assistant:2021.10";
 const HOME_ASSISTANT_DATABASE_IMAGE = "mysql:8";
 const ZIGBEE2MQTT_IMAGE = "koenkk/zigbee2mqtt";
 const MOSQUITTO_IMAGE = "eclipse-mosquitto:2";
