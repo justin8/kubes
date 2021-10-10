@@ -66,6 +66,7 @@ new LinuxServerApp(app, "Transmission", {
   appName: "transmission",
   port: 9091,
   ...config,
+  enableHostNetworking: true,
   env: [
     {
       name: "USER",
