@@ -2,7 +2,6 @@ import { App } from "cdk8s";
 import { HomeAutomation } from "./charts/homeassistant";
 import { Netdata } from "./charts/netdata";
 import { Syncthing } from "./charts/syncthing";
-import { TeslaMate } from "./charts/teslamate";
 
 import * as config from "./config.json";
 import { LinuxServerApp } from "./lib/linuxServerApp";
@@ -80,7 +79,5 @@ new LinuxServerApp(app, "Transmission", {
 });
 
 new HomeAutomation(app, "HomeAutomation", { ...config });
-
-new TeslaMate(app, "TeslaMate", { ...config });
 
 app.synth();
