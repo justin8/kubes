@@ -2,7 +2,7 @@
   "parentDomainName": "example.com",
   "hostStoragePath": "/storage",
   "hostConfigPath": "/config",
-  "groupID": "1001",
+  "groupID": "1005",
   "userID": "1001",
   "user": "user1",
   "password": "hunter2",

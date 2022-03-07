@@ -1,4 +1,5 @@
 import { App } from "cdk8s";
+import { GameServer } from "./charts/game";
 import { HomeAutomation } from "./charts/homeassistant";
 import { Netdata } from "./charts/netdata";
 import { Syncthing } from "./charts/syncthing";
@@ -79,5 +80,32 @@ new LinuxServerApp(app, "Transmission", {
 });
 
 new HomeAutomation(app, "HomeAutomation", { ...config });
+
+// Game servers
+//   These are just configured in the top level, most are pretty straightforward and just need a few env vars to be set
+//
+
+// new GameServer(app, "Satisfactory", {
+//   ...config,
+//   containerConfigPath: "/config",
+//   image: "wolveix/satisfactory-server:latest",
+//   env: [
+//     {name: "MAXPLAYERS", value: "4"},
+//     {name: "STEAMBETA", value: "false"}
+//   ]
+// });
+
+new GameServer(app, "Valheim", {
+  ...config,
+  containerConfigPath: "/config",
+  containerDataPath: "/opt/valheim",
+  image: "lloesche/valheim-server",
+  env: [
+    { name: "SERVER_NAME", value: "Justin" },
+    { name: "WORLD_NAME", value: "Justin" },
+    { name: "SERVER_PASS", value: "secret" },
+    { name: "VALHEIM_PLUS", value: "true" },
+  ],
+});
 
 app.synth();
